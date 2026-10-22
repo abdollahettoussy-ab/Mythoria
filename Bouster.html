@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Fantasy Trading Card Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+   
+</head>
+
+<body class="bg-blue-400">
+    <header>
+        <div class="flex justify-between px-2 py-2 text-3xl backdrop-blur-md mb-px font-[custom-property]">
+            <div class="w-48 h-15 mx-10">
+                <img src="logo.png" alt="" class="w-full h-full object-contain  ">
+            </div>
+            <nav aria-label="navigation se">
+                <ul class="flex gap-6 text-white my-4 mx-10 ">
+                    <li><a href="index.html">Home</a></li>
+                      <li><a href="Bouster.html">Bouster-Shop</span></a></li>
+                    <li><a href="Grimoir.html">My Grimoir</a></li>
+                    <li><a href="Deck.html">Deck</a></li>
+                    
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="flex  justify-between  gap-6 w-[1000px] h-[800px] mt-[200px] ml-[200px] mr-[0px]  font-[custom-property] ">
+        
+        <div class="mb-3 space-y-1 text-xs text-gray-200">
+                <img src="beginner.png" alt="">
+            <div class="text-3xl">
+                <p><span class="text-blue-400 "> 5 </span>Beginner</p>
+                <p>Commune <span class="text-red-400">(40%)</span></p>
+                <p>Rare <span class="text-pink-400">(45%)</span></p>
+                <p>Épique <span class="text-purple-400">(15%)</span></p>
+                <p>Légendaire <span class="text-yellow-400">(0%)</span></p>
+                <p>prix:<span class="text-yellow-900">400DH</span></p>
+                <button class="border rounded-md bg-yellow-500 font-[custom-property] p-3">Ajouter</button>
+                
+            </div>
+            
+        </div>
+        <div class="mb-3 space-y-1 text-xs text-gray-200">
+                <img src="summoning.png" alt="">
+            <div class="text-3xl">
+            
+                <p><span class="text-blue-400 "> 5 </span>summoning</p>
+                <p>Commune <span class="text-red-400">(55%)</span></p>
+                <p>Rare <span class="text-pink-400">(35%)</span></p>
+                <p>Épique <span class="text-purple-400">(10%)</span></p>
+                <p>Légendaire <span class="text-yellow-400">(0%)</span></p>
+                <p>prix:<span class="text-yellow-900">430DH</span></p>
+                 <button class="border rounded-md bg-yellow-500 font-[custom-property] p-3">Ajouter</button>
+            </div>
+            
+        </div >
+        <div class="mb-3 space-y-1 text-xs text-gray-200">
+                <img src="dark.png" alt="">
+            <div class="text-3xl">
+                <p><span class="text-blue-400 "> 5 </span>DArk </p>
+                <p>Commune <span class="text-red-400">(40%)</span></p>
+                <p>Rare <span class="text-pink-400">(30%)</span></p>
+                <p>Épique <span class="text-purple-400">(25%)</span></p>
+                <p>Légendaire <span class="text-yellow-400">(5%)</span></p>
+                <p>prix:<span class="text-yellow-900">450DH</span></p>
+                 <button class="border rounded-md bg-yellow-500 font-[custom-property] p-3">Ajouter</button>
+            </div>
+        </div>
+        </div>
+        <div class="mb-3 space-y-1 text-3xl text-gray-200 gap-6 w-[318px] h-[788px] mt-[-800px] ml-[1240px] mr-[0px]  font-[custom-property] ">
+                <img src="lucky.png" alt="lucky"  >
+                <div class="ml-[50px]">
+                <p><span class="text-blue-400 "> 5 </span>Lucky</p>
+                <p>Commune <span class="text-red-400">(55%)</span></p>
+                <p>Rare <span class="text-pink-400">(25%)</span></p>
+                <p>Épique <span class="text-purple-400">(20%)</span></p>
+                <p>Légendaire <span class="text-yellow-400">(10%)</span></p>
+                <p>prix:<span class="text-yellow-900">500DH</span></p>
+                 <button class="border rounded-md bg-yellow-500 font-[custom-property] p-3">Ajouter</button>
+                </div>
+                <h2 class="font-[custom-property] text-3xl text-black-100">panier:<span id="shop">0</span></h2>
+                <p>Totale:<span id="total">0</span></p>
+        </div>
+    
+
+</body>
+ <script src="script.js" defer></script>
+
+</html>
