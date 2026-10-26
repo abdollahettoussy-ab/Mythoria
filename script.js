@@ -3,8 +3,8 @@ const totalSpan = document.querySelector('#total');
 
 let total = 0;
 let nombreProduits = 0;
-
-// Fonction pour ajouter un produit
+let produits =[];
+ // function ajouter
 function ajouterProduit(titre, prix) {
     const li = document.createElement('li');
 
@@ -19,7 +19,7 @@ function ajouterProduit(titre, prix) {
     li.appendChild(texte);
     li.appendChild(btn);
 
-    // Créer la liste du panier
+    
     let listePanier = document.querySelector('#liste-panier');
 
     if (!listePanier) {
@@ -34,14 +34,13 @@ function ajouterProduit(titre, prix) {
 
     listePanier.appendChild(li);
 
-    total += prix;
+    total += prix ;
     nombreProduits++;
 
     panier.textContent = nombreProduits;
     totalSpan.textContent = total;
 }
 
-// Récupérer tous les boutons Ajouter
 const boutons = document.querySelectorAll('button');
 
 boutons.forEach((bouton) => {
@@ -54,16 +53,16 @@ boutons.forEach((bouton) => {
             let titre = '';
             let prix = 0;
 
-            if (image === 'beginner.png') {
+            if (image === 'img/beginner.png') {
                 titre = 'Beginner';
                 prix = 400;
-            } else if (image === 'summoning.png') {
+            } else if (image === 'img/summoning.png') {
                 titre = 'Summoning';
                 prix = 430;
-            } else if (image === 'dark.png') {
+            } else if (image === 'img/dark.png') {
                 titre = 'Dark';
                 prix = 450;
-            } else if (image === 'lucky.png') {
+            } else if (image === 'img/lucky.png') {
                 titre = 'Lucky';
                 prix = 500;
             }
@@ -75,7 +74,9 @@ boutons.forEach((bouton) => {
     }
 });
 
-// Supprimer un produit
+
+
+
 document.addEventListener('click', (e) => {
     if (e.target.classList.contains('supprimer')) {
 
