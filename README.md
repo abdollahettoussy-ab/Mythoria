@@ -42,7 +42,7 @@ Le projet commence par le fichier `index.html`, qui représente la page d'accuei
 
 ## Planification
 
-@abdollahettoussy-ab's untitled project
+[@abdollahettoussy-ab's untitled project](https://github.com/users/abdollahettoussy-ab/projects/11)
 ## Réalisé par
 
 **Abdellah Ettoussy**
