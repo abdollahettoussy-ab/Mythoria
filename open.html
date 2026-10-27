@@ -9,14 +9,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
-   
+
 </head>
 
 <body class="bg-blue-400">
-    <header>
-        <div class="flex justify-between px-2 py-2 text-3xl backdrop-blur-md mb-px font-[custom-property]">
+    <header class="fixed top-0 left-0 right-0 z-[9999] w-full">
+        <div class="flex justify-between px-2 py-2 text-3xl backdrop-blur-md mb-px font-[custom-property] ">
             <div class="w-48 h-15 mx-10">
-                <img src="logo.png" alt="" class="w-full h-full object-contain  ">
+                <img src="img/logo.png" alt="" class="w-full h-full object-contain  ">
             </div>
             <nav aria-label="navigation se">
                 <ul class="flex gap-6 text-white my-4 mx-10 ">
@@ -25,11 +25,60 @@
                     <li><a href="open.html">Open-Bousters</a></li>
                     <li><a href="Grimoir.html">My Grimoir</a></li>
                     <li><a href="Deck.html">Deck</a></li>
-                    
+
                 </ul>
             </nav>
         </div>
+        <style>
+            #pack-container {
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+
+            #pack-container::-webkit-scrollbar {
+                display: none;
+            }
+        </style>
     </header>
-    
+    <div id="pack-container"
+        class="flex flex-nowrap overflow-x-auto overflow-y-hidden gap-2 font-[custom-property] mt-24 text-2xl"></div>
+
 </body>
+<script>
+
+    const container = document.querySelector('#pack-container');
+
+    const texte = localStorage.getItem('panier');
+
+    if (container && texte) {
+        const produits = JSON.parse(texte);
+
+        
+        produits.forEach(pack => {
+            const bloc = document.createElement('div');
+            const image = document.createElement('img');
+       ;
+            image.src = pack.image;
+            image.alt = pack.titre;
+            image.style.width = '300px';
+
+            const titre = document.createElement('h2');
+            titre.textContent = pack.titre;
+
+            const prix = document.createElement('p');
+            prix.textContent = pack.prix + ' DH';
+
+            const bouton = document.createElement('button');
+            bouton.textContent = 'Open';
+
+            bloc.className = 'flex flex-col items-center gap-3 shrink-0';
+            bloc.append(image, titre, prix, bouton);
+            container.append(bloc);
+            
+        }
+        )
+    };
+
+</script>
+
 </html>

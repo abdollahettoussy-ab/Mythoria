@@ -1,102 +1,165 @@
+
 const panier = document.querySelector('#shop');
 const totalSpan = document.querySelector('#total');
 
+let produits = [];
 let total = 0;
 let nombreProduits = 0;
-let produits =[];
- // function ajouter
-function ajouterProduit(titre, prix) {
-    const li = document.createElement('li');
 
-    const texte = document.createElement('span');
-    texte.textContent = `${titre} _ ${prix} DH`;
+// 1. Créer la liste du panier
+let listePanier = document.querySelector('#liste-panier');
 
-    const btn = document.createElement('button');
-    btn.textContent = 'supprimer';
-    btn.className = 'supprimer';
-    btn.style.marginLeft = '10px';
+if (!listePanier) {
+    listePanier = document.createElement('ul');
+    listePanier.id = 'liste-panier';
 
-    li.appendChild(texte);
-    li.appendChild(btn);
-
-    
-    let listePanier = document.querySelector('#liste-panier');
-
-    if (!listePanier) {
-        listePanier = document.createElement('ul');
-        listePanier.id = 'liste-panier';
-        listePanier.style.marginTop = '15px';
-
-        const totalElement = document.querySelector('#total');
-
-        totalElement.parentElement.before(listePanier);
+    if (totalSpan && totalSpan.parentElement) {
+        totalSpan.parentElement.before(listePanier);
     }
-
-    listePanier.appendChild(li);
-
-    total += prix ;
-    nombreProduits++;
-
-    panier.textContent = nombreProduits;
-    totalSpan.textContent = total;
 }
 
-const boutons = document.querySelectorAll('button');
+// 2. Sauvegarder le panier avec JSON
+function sauvegarderPanier() {
+    localStorage.setItem('panier', JSON.stringify(produits));
+}
 
-boutons.forEach((bouton) => {
-    if (bouton.textContent.trim() === 'Ajouter') {
+// 3. Afficher le panier et calculer le total
+function afficherPanier() {
+    listePanier.innerHTML = '';
 
-        bouton.addEventListener('click', () => {
-            const bloc = bouton.closest('.mb-3');
-            const image = bloc.querySelector('img').getAttribute('src');
+    total = 0;
+    nombreProduits = produits.length;
 
-            let titre = '';
-            let prix = 0;
+    produits.forEach((produit, index) => {
+        const li = document.createElement('li');
 
-            if (image === 'img/beginner.png') {
-                titre = 'Beginner';
-                prix = 400;
-            } else if (image === 'img/summoning.png') {
-                titre = 'Summoning';
-                prix = 430;
-            } else if (image === 'img/dark.png') {
-                titre = 'Dark';
-                prix = 450;
-            } else if (image === 'img/lucky.png') {
-                titre = 'Lucky';
-                prix = 500;
-            }
+        const texte = document.createElement('span');
+        texte.textContent = `${produit.titre} - ${produit.prix} DH`;
 
-            if (prix > 0) {
-                ajouterProduit(titre, prix);
-            }
-        });
+        const btn = document.createElement('button');
+        btn.textContent = 'Supprimer';
+        btn.type = 'button';
+        btn.className = 'supprimer';
+        btn.dataset.index = index;
+        btn.style.marginLeft = '10px';
+
+        li.append(texte, btn);
+        listePanier.appendChild(li);
+
+        total += produit.prix;
+    });
+
+    if (panier) {
+        panier.textContent = nombreProduits;
     }
-});
 
+    if (totalSpan) {
+        totalSpan.textContent = total;
+    }
+}
 
+// 4. Ajouter un produit
+function ajouterProduit(titre, prix, image) {
+    produits.push({
+        titre: titre,
+        prix: prix,
+        image: image
+    });
 
+    sauvegarderPanier();
+    afficherPanier();
+}
 
-document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('supprimer')) {
+// 5. Relier les boutons Ajouter
+document.querySelectorAll('button').forEach(bouton => {
+    if (bouton.textContent.trim() !== 'Ajouter') {
+        return;
+    }
 
-        const li = e.target.closest('li');
-        const texte = li.querySelector('span').textContent;
+    if (bouton.dataset.panierLie === 'oui') {
+        return;
+    }
 
-        const prixTexte = texte.split('_')[1]
-            .replace('DH', '')
-            .trim();
+    bouton.dataset.panierLie = 'oui';
 
-        const prix = parseInt(prixTexte, 10);
+    bouton.addEventListener('click', function () {
+        const bloc = bouton.closest('.mb-3');
 
-        if (!isNaN(prix)) {
-            total -= prix;
-            nombreProduits--;
-
-            totalSpan.textContent = total;
-            panier.textContent = nombreProduits;
+        if (!bloc) {
+            console.error('Le bloc du produit est introuvable');
+            return;
         }
 
-        li.remove();
-    }
+        const img = bloc.querySelector('img');
+
+        if (!img) {
+            console.error('Image du produit introuvable');
+            return;
+        }
+
+        const image = img.getAttribute('src');
+
+        const prixProduits = {
+            'beginner.png': ['Beginner', 400],
+            'summoning.png': ['Summoning', 430],
+            'dark.png': ['Dark', 450],
+            'lucky.png': ['Lucky', 500]
+        };
+
+        const nomImage = image.split('/').pop().split('?')[0];
+        const produit = prixProduits[nomImage];
+
+        if (!produit) {
+            console.error('Produit non reconnu :', nomImage);
+            return;
+        }
+
+        ajouterProduit(produit[0], produit[1], image);
+    });
 });
+
+// 6. Supprimer un produit
+listePanier.addEventListener('click', function (e) {
+    const bouton = e.target.closest('.supprimer');
+
+    if (!bouton || !listePanier.contains(bouton)) {
+        return;
+    }
+
+    const index = Number(bouton.dataset.index);
+
+    if (!Number.isInteger(index) || index < 0 || index >= produits.length) {
+        return;
+    }
+
+    produits.splice(index, 1);
+
+    sauvegarderPanier();
+    afficherPanier();
+});
+
+// 7. Charger les produits sauvegardés avec JSON
+function chargerPanier() {
+    const texte = localStorage.getItem('panier');
+
+    if (texte) {
+        try {
+            const donnees = JSON.parse(texte);
+
+            if (Array.isArray(donnees)) {
+                produits = donnees.filter(produit =>
+                    produit &&
+                    typeof produit.titre === 'string' &&
+                    Number.isFinite(produit.prix)
+                );
+            }
+        } catch (erreur) {
+            console.error('Erreur de lecture du panier :', erreur);
+            produits = [];
+        }
+    }
+
+    afficherPanier();
+}
+
+chargerPanier();
