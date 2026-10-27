@@ -1,0 +1,331 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Deck - Mythoria</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+</head>
+
+<body class="bg-[url('img/Gbg.png')]">
+
+    <!-- Header -->
+    <header>
+        <div class="flex flex-col px-2 py-2 text-3xl backdrop-blur-md mb-px font-[custom-property] w-48 h-full">
+
+            <div class="w-44 h-15 mx-10">
+                <img src="img/logo.png" alt="" class="w-full h-full object-contain ml-[-40px]">
+            </div>
+
+            <div class="flex flex-col gap-6 text-white my-4 mx-10">
+                <a href="index.html">Home</a>
+                <a href="Bouster.html">Bouster-Shop</a>
+                <a href="open.html">Open-Bousters</a>
+                <a href="Grimoir.html">My Grimoir</a>
+                <a href="Deck.html">Deck</a>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Main container -->
+    <div class="text-yellow-100 border-[3px] border-solid border-blue w-[1170px] h-[750px] ml-[250px] mt-[-420px]">
+
+        <!-- Cartes disponibles -->
+        <div class="border-[3px] border-solid border-black w-[490px] h-[680px] ml-[25px] mt-[35px]">
+
+            <section class="p-4">
+
+                <h1 class="text-4xl text-white font-bold mb-3">
+                    My Grimoir
+                </h1>
+
+                <p class="text-white mb-3">
+                    Choose your cards for your deck.
+                </p>
+
+                <div id="mes-cartes"
+                     class="grid grid-cols-2 gap-3 h-[550px] overflow-y-auto overflow-x-hidden content-start p-2">
+                </div>
+
+            </section>
+
+        </div>
+
+        <!-- Mon Deck -->
+        <div class="ml-[530px] border-[3px] border-solid border-black mt-[-680px] w-[570px] h-[680px] p-4">
+
+            <h1 class="text-4xl text-white font-bold mb-3">
+                My Deck
+            </h1>
+
+            <p class="text-white text-xl mb-2">
+                Cards: <span id="nombre-cartes">0</span> / 20
+            </p>
+
+            <!-- Progression -->
+            <div class="border border-white w-full h-3 mb-4">
+                <div id="progression" class="h-full" style="width: 0%;"></div>
+            </div>
+
+            <!-- Statistiques -->
+            <div class="border border-black p-3 mb-4">
+
+                <h2 class="text-2xl text-white font-bold mb-2">
+                    Deck Statistics
+                </h2>
+
+                <p>Heroes: <span id="nombre-heros">0</span></p>
+                <p>Creatures: <span id="nombre-creatures">0</span></p>
+                <p>Serviteurs: <span id="nombre-serviteurs">0</span></p>
+                <p>Spells: <span id="nombre-sorts">0</span></p>
+                <p>Other cards: <span id="nombre-autres">0</span></p>
+
+            </div>
+
+            <!-- Cartes choisies -->
+            <div id="cartes-deck"
+                 class="grid grid-cols-3 gap-3 h-[350px] overflow-y-auto overflow-x-hidden content-start p-2">
+            </div>
+
+            <p id="message" class="text-white mt-2"></p>
+
+        </div>
+
+    </div>
+
+    <script>
+        // Récupérer les éléments HTML
+        const conteneurCartes = document.querySelector('#mes-cartes');
+        const conteneurDeck = document.querySelector('#cartes-deck');
+
+        const nombreCartes = document.querySelector('#nombre-cartes');
+        const progression = document.querySelector('#progression');
+        const message = document.querySelector('#message');
+
+        const limiteDeck = 20;
+
+        // Récupérer les cartes du Grimoir
+        const collection =
+            JSON.parse(localStorage.getItem('mesCartes')) || [];
+
+        // Récupérer le deck enregistré
+        let monDeck =
+            JSON.parse(localStorage.getItem('monDeck')) || [];
+
+        // Éviter les doublons dans le deck
+        monDeck = [...new Set(monDeck)];
+
+        // Garder uniquement les cartes qui existent dans la collection
+        monDeck = monDeck.filter(chemin => collection.includes(chemin));
+
+        // Respecter la limite de 20 cartes
+        monDeck = monDeck.slice(0, limiteDeck);
+
+        // Enregistrer le deck nettoyé
+        localStorage.setItem('monDeck', JSON.stringify(monDeck));
+
+
+        // Déterminer le type de carte à partir de son nom de fichier
+        function determinerType(chemin) {
+            const nom = chemin.split('/').pop().toLowerCase();
+
+            if (nom.includes('hero') || nom.includes('héro')) {
+                return 'heros';
+            }
+
+            if (nom.includes('creature') || nom.includes('créature')) {
+                return 'creatures';
+            }
+
+            if (nom.includes('serviteur')) {
+                return 'serviteurs';
+            }
+
+            if (nom.includes('sort')) {
+                return 'sorts';
+            }
+
+            return 'autres';
+        }
+
+
+        // Afficher les cartes disponibles dans le Grimoir
+        function afficherCollection() {
+            conteneurCartes.innerHTML = '';
+
+            if (collection.length === 0) {
+                conteneurCartes.textContent = 'Your Grimoir is empty.';
+                return;
+            }
+
+            collection.forEach((chemin, index) => {
+                const carte = document.createElement('div');
+
+                carte.className = 'flex flex-col items-center gap-2';
+
+                const image = document.createElement('img');
+
+                image.src = chemin;
+                image.alt = 'Carte ' + (index + 1);
+                image.className = 'w-full rounded-xl shadow-lg';
+
+                const bouton = document.createElement('button');
+
+                bouton.className =
+                    'border border-white text-white px-2 py-1 text-sm w-full';
+
+                if (monDeck.includes(chemin)) {
+                    bouton.textContent = 'Déjà ajoutée';
+                    bouton.disabled = true;
+                    bouton.classList.add('opacity-50', 'cursor-not-allowed');
+                } else {
+                    bouton.textContent = 'Ajouter au deck';
+
+                    bouton.addEventListener('click', function () {
+                        ajouterCarte(chemin);
+                    });
+                }
+
+                carte.appendChild(image);
+                carte.appendChild(bouton);
+
+                conteneurCartes.appendChild(carte);
+            });
+        }
+
+
+        // Ajouter une carte au deck
+        function ajouterCarte(chemin) {
+            if (monDeck.includes(chemin)) {
+                message.textContent = 'Cette carte est déjà dans le deck.';
+                return;
+            }
+
+            if (monDeck.length >= limiteDeck) {
+                message.textContent = 'Your deck is full! Maximum: 20 cards.';
+                return;
+            }
+
+            monDeck.push(chemin);
+
+            sauvegarderDeck();
+            afficherTout();
+
+            message.textContent = 'Card added to your deck.';
+        }
+
+
+        // Retirer une carte du deck
+        function retirerCarte(chemin) {
+            monDeck = monDeck.filter(carte => carte !== chemin);
+
+            sauvegarderDeck();
+            afficherTout();
+
+            message.textContent = 'Card removed from your deck.';
+        }
+
+
+        // Sauvegarder le deck dans LocalStorage
+        function sauvegarderDeck() {
+            localStorage.setItem('monDeck', JSON.stringify(monDeck));
+        }
+
+
+        // Afficher les cartes sélectionnées
+        function afficherDeck() {
+            conteneurDeck.innerHTML = '';
+
+            monDeck.forEach((chemin, index) => {
+                const carte = document.createElement('div');
+
+                carte.className = 'flex flex-col items-center gap-2';
+
+                const image = document.createElement('img');
+
+                image.src = chemin;
+                image.alt = 'Carte du deck ' + (index + 1);
+                image.className = 'w-full rounded-xl shadow-lg';
+
+                const bouton = document.createElement('button');
+
+                bouton.textContent = 'Retirer';
+                bouton.className =
+                    'border border-white text-white px-2 py-1 text-sm w-full';
+
+                bouton.addEventListener('click', function () {
+                    retirerCarte(chemin);
+                });
+
+                carte.appendChild(image);
+                carte.appendChild(bouton);
+
+                conteneurDeck.appendChild(carte);
+            });
+
+            if (monDeck.length === 0) {
+                conteneurDeck.textContent = 'No cards selected yet.';
+            }
+        }
+
+
+        // Calculer les statistiques
+        function afficherStatistiques() {
+            const statistiques = {
+                heros: 0,
+                creatures: 0,
+                serviteurs: 0,
+                sorts: 0,
+                autres: 0
+            };
+
+            monDeck.forEach(chemin => {
+                const type = determinerType(chemin);
+                statistiques[type]++;
+            });
+
+            nombreCartes.textContent = monDeck.length;
+
+            document.querySelector('#nombre-heros').textContent =
+                statistiques.heros;
+
+            document.querySelector('#nombre-creatures').textContent =
+                statistiques.creatures;
+
+            document.querySelector('#nombre-serviteurs').textContent =
+                statistiques.serviteurs;
+
+            document.querySelector('#nombre-sorts').textContent =
+                statistiques.sorts;
+
+            document.querySelector('#nombre-autres').textContent =
+                statistiques.autres;
+
+            const pourcentage = (monDeck.length / limiteDeck) * 100;
+
+            progression.style.width = pourcentage + '%';
+        }
+
+
+        // Actualiser les deux parties
+        function afficherTout() {
+            afficherCollection();
+            afficherDeck();
+            afficherStatistiques();
+        }
+
+
+        // Affichage initial
+        afficherTout();
+    </script>
+
+</body>
+</html>
