@@ -42,42 +42,124 @@
     </header>
     <div id="pack-container"
         class="flex flex-nowrap overflow-x-auto overflow-y-hidden gap-2 font-[custom-property] mt-24 text-2xl"></div>
+    <div id="cartes-container" 
+        class="flex flex-wrap justify-center gap-6 mt-8"></div>
 
 </body>
 <script>
 
-    const container = document.querySelector('#pack-container');
 
-    const texte = localStorage.getItem('panier');
+const container = document.querySelector('#pack-container');
 
-    if (container && texte) {
-        const produits = JSON.parse(texte);
+//  dossier cartes
+const cartes = [
+    'cartes/legend.jpg',
+    'cartes/legend1.jpg',
+    'cartes/legend2.jpg',
+    'cartes/legend3.jpg',
+    'cartes/créature5.png',
+    'cartes/créature0.png',
+    'cartes/créature1.png',
+    'cartes/créature2.png',
+    'cartes/créature3.png',
+    'cartes/créature4.png',
+    'cartes/créature6.png',
+    'cartes/créature7.png',
+    'cartes/héro4.png',
+    'cartes/héro1.png',
+    'cartes/héro2.png',
+    'cartes/héros0.png',
+    'cartes/héro3.png',
+    'cartes/sort0.png',
+    'cartes/sort1.png',
+    
+];
 
-        
-        produits.forEach(pack => {
-            const bloc = document.createElement('div');
-            const image = document.createElement('img');
-       ;
-            image.src = pack.image;
-            image.alt = pack.titre;
-            image.style.width = '300px';
+const texte = localStorage.getItem('panier');
 
-            const titre = document.createElement('h2');
-            titre.textContent = pack.titre;
+if (container && texte) {
+    const produits = JSON.parse(texte);
 
-            const prix = document.createElement('p');
-            prix.textContent = pack.prix + ' DH';
+    produits.forEach(pack => {
+        const bloc = document.createElement('div');
+        const image = document.createElement('img');
+        const titre = document.createElement('h2');
+        const prix = document.createElement('p');
+        const bouton = document.createElement('button');
 
-            const bouton = document.createElement('button');
-            bouton.textContent = 'Open';
+        image.src = pack.image;
+        image.alt = pack.titre;
+        image.className =
+            'w-[300px] transition-all duration-700 ease-in-out';
 
-            bloc.className = 'flex flex-col items-center gap-3 shrink-0';
-            bloc.append(image, titre, prix, bouton);
-            container.append(bloc);
+        titre.textContent = pack.titre;
+        prix.textContent = pack.prix + ' DH';
+
+        bouton.textContent = 'Open';
+        bouton.className =
+            'bg-purple-700 hover:bg-purple-500 text-white font-bold px-6 py-2 rounded-lg cursor-pointer transition duration-300 shadow-lg';
+
+        bloc.className =
+            'flex flex-col items-center gap-3 shrink-0';
+
+        bloc.append(image, titre, prix, bouton);
+        container.append(bloc);
+
+        bouton.addEventListener('click', () => {
+            if (bouton.disabled) return;
+
+            bouton.disabled = true;
+
             
-        }
-        )
-    };
+            image.classList.add('animate-bounce');
+
+            setTimeout(() => {
+                
+                const melanges = [...cartes];
+
+                for (let i = melanges.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [melanges[i], melanges[j]] =
+                        [melanges[j], melanges[i]];
+                }
+
+                const cartesChoisies = melanges.slice(0, 5);
+
+               
+                const anciennesCartes =
+                    JSON.parse(localStorage.getItem('mesCartes')) || [];
+
+                
+                const nouvellesCartes = [
+                    ...anciennesCartes,
+                    ...cartesChoisies
+                ];
+
+                localStorage.setItem(
+                    'mesCartes',
+                    JSON.stringify(nouvellesCartes)
+                );
+
+                
+                image.classList.remove('animate-bounce');
+                image.classList.add(
+                    '-translate-y-32',
+                    'opacity-0',
+                    'scale-75'
+                );
+
+                setTimeout(() => {
+                    bloc.remove();
+                }, 700);
+
+                alert(
+                    'Pack ouvert ! 5 cartes ajoutées à ton Grimoir.'
+                );
+            }, 1000);
+        });
+    });
+}
+
 
 </script>
 

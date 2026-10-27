@@ -40,12 +40,37 @@
         <div
             class="border-[3px] border-solid border-black w-[490px] h-[680px] ml-[25px] mt-[35px] flex flex-wrap gap-2">
 
-            <img src="img/téléchargement (7).jpg" alt="" class="w-[100px] h-[200px]">
-            <img src="img/téléchargement (8).jpg" alt="" class="w-[100px] h-[200px]">
-            <img src="img/téléchargement (9).jpg" alt="" class="w-[100px] h-[200px]">
-            <img src="img/téléchargement (10).jpg" alt="" class="w-[100px] h-[200px]">
-            <img src="img/téléchargement (11).jpg" alt="" class="w-[100px] h-[200px]">
-            
+
+            <section class="p-6">
+                <h1 class="text-4xl text-white font-bold mb-6">
+                    My Grimoir
+                </h1>
+
+                <div id="mes-cartes" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                </div>
+            </section>
+
+            <script>
+                const conteneurCartes = document.querySelector('#mes-cartes');
+
+                const mesCartes =
+                    JSON.parse(localStorage.getItem('mesCartes')) || [];
+
+                mesCartes.forEach((chemin, index) => {
+                    const carte = document.createElement('div');
+                    carte.className = 'flex flex-col items-center gap-2';
+
+                    const image = document.createElement('img');
+                    image.src = chemin;
+                    image.alt = 'Carte ' + (index + 1);
+                    image.className = 'w-full max-w-[200px] rounded-xl shadow-lg';
+
+                    carte.appendChild(image);
+                    conteneurCartes.appendChild(carte);
+                });
+            </script>
+
+
         </div>
         <div class="ml-[630px] border-[3px] border-solid border-black mt-[-680px] w-[500px] h-[680px]">
 
