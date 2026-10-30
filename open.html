@@ -25,6 +25,7 @@
                     <li><a href="open.html">Open-Bousters</a></li>
                     <li><a href="Grimoir.html">My Grimoir</a></li>
                     <li><a href="Deck.html">Deck</a></li>
+                    <li><a href="MYTHORIA2/arena.html">Arena</a></li>
 
                 </ul>
             </nav>
@@ -117,8 +118,8 @@ if (container && texte) {
                 
                 const melanges = [...cartes];
 
-                for (let i = melanges.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
+                for (let i = 0; i < melanges.length - 1; i++) {
+                    const j = Math.floor(Math.random() * (melanges.length - 1 )+0);
                     [melanges[i], melanges[j]] =
                         [melanges[j], melanges[i]];
                 }
