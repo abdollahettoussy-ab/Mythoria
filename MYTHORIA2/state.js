@@ -1,18 +1,18 @@
 export const gameStat = {
-    player :{
-        hp:3000 ,
-        faction: null ,
+    player: {
+        hp: 3000,
+        faction: null,
         hand: [],
-        terain: [],
-        deck:[]
+        terrain: [],
+        deck: []
     },
-    adversaire :{
-         hp:3000 ,
-        faction: null ,
+    adversaire: {
+        hp: 3000,
+        faction: null,
         hand: [],
-        terain: [],
-        deck:[]
+        terrain: [],
+        deck: []
     },
-      currentTurn: null,
-      gameOver: false
+    currentTurn: null,
+    gameOver: false
 }

@@ -1,0 +1,42 @@
+#coin {
+    perspective: 1000px;
+}
+
+.coin-inner {
+    position: relative;
+    width: 128px;
+    height: 128px;
+    transform-style: preserve-3d;
+
+}
+
+.coin-inner img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
+}
+
+.coin-inner img:first-child {
+    transform: rotateY(0deg);
+}
+
+.coin-inner img:last-child {
+    transform: rotateY(180deg);
+}
+.coin-inner.flip{
+    animation: flipCoin 3s ease-in-out forwards;
+}
+@keyframes flipCoin{
+    from{
+        transform: rotateY(0deg);
+    }
+    to{
+        transform: rotateY(var(--rotation));
+    }
+}
