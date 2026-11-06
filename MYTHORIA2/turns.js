@@ -1,5 +1,25 @@
 import { gameStat } from "./state.js";
 
+const hpAdversaire = document.querySelector("#hpAdversaire");
+const hpPlayer = document.querySelector("#hpPlayer");
+const factionAdversaire = document.querySelector("#factionAdversaire");
+const factionPlayer = document.querySelector("#factionPlayer"); 
+const deckAdversaire = document.querySelector("#deckAdversaire");
+const deckPlayer = document.querySelector("#deckPlayer");
+const botCards = [
+    document.querySelector("#botCard1"),
+    document.querySelector("#botCard2"),
+    document.querySelector("#botCard3"),
+    document.querySelector("#botCard4"),
+    document.querySelector("#botCard5")
+];
+const playerCards = [
+    document.querySelector("#playerCard1"),
+    document.querySelector("#playerCard2"),
+    document.querySelector("#playerCard3"),
+    document.querySelector("#playerCard4"),
+    document.querySelector("#playerCard5")
+];
 
 
 
@@ -76,8 +96,10 @@ function choisirFace() {
         }
         else {
             gameStat.currentTurn = "adversaire";
-            
-            resultatJeu.textContent = "Boute commence !";
+            gameStat.adversaire.faction = Math.random() < 0.5 ? "Lumière " : "Ténèbres";
+            gameStat.player.faction = gameStat.adversaire.faction === "Lumière" ? "ténèbres" : "Lumière";
+            resultatJeu.textContent = `Mode choisi : ${gameStat.player.faction}`;
+            ;
         }
         btnFace.classList.add("hidden");
         btnPile.classList.add("hidden");
