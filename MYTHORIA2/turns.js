@@ -1,9 +1,19 @@
 import { gameStat } from "./state.js";
+import { cartes } from "./cards.js";
+
+const monDeck = JSON.parse(localStorage.getItem("monDeck")) || [];
+
+const cartesJoueur = monDeck
+    .slice(0, 10)
+    .map(image => cartes.find(carte => carte.image === image))
+    .filter(carte => carte !== undefined);
+gameStat.player.hand = cartesJoueur.slice(0, 5);
+gameStat.player.deck = cartesJoueur.slice(5, 10);
 
 const hpAdversaire = document.querySelector("#hpAdversaire");
 const hpPlayer = document.querySelector("#hpPlayer");
 const factionAdversaire = document.querySelector("#factionAdversaire");
-const factionPlayer = document.querySelector("#factionPlayer"); 
+const factionPlayer = document.querySelector("#factionPlayer");
 const deckAdversaire = document.querySelector("#deckAdversaire");
 const deckPlayer = document.querySelector("#deckPlayer");
 const botCards = [
@@ -96,13 +106,16 @@ function choisirFace() {
         }
         else {
             gameStat.currentTurn = "adversaire";
-            gameStat.adversaire.faction = Math.random() < 0.5 ? "Lumière " : "Ténèbres";
+            gameStat.adversaire.faction = Math.random() < 0.5 ? "Lumière" : "Ténèbres";
             gameStat.player.faction = gameStat.adversaire.faction === "Lumière" ? "ténèbres" : "Lumière";
             resultatJeu.textContent = `Mode choisi : ${gameStat.player.faction}`;
-            ;
+            resultatJeu.classList.add("hidden");
         }
+
         btnFace.classList.add("hidden");
         btnPile.classList.add("hidden");
+        factionAdversaire.textContent = gameStat.adversaire.faction;
+        factionPlayer.textContent = gameStat.player.faction;
     });
     lumiere.addEventListener("click", () => {
         gameStat.player.faction = "Lumière";
@@ -115,6 +128,8 @@ function choisirFace() {
         }
         resultatJeu.textContent = "";
         choixCamp.classList.add("hidden");
+        factionPlayer.textContent = gameStat.player.faction;
+        factionAdversaire.textContent = gameStat.adversaire.faction;
 
     });
     tenebres.addEventListener("click", () => {
@@ -128,6 +143,8 @@ function choisirFace() {
         }
         resultatJeu.textContent = "";
         choixCamp.classList.add("hidden");
+        factionPlayer.textContent = gameStat.player.faction;
+        factionAdversaire.textContent = gameStat.adversaire.faction;
     });
 
 }
